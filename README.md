@@ -1,7 +1,7 @@
 # SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence for Complex Reasoning
 
 
-SemFlowRAG is a novel framework for complex reasoning in Retrieval-Augmented Generation, designed to overcome the "Probability Black Holes" inherent in traditional graph-based retrieval. By constructing a Semantic Gradient Knowledge Graph and employing directed semantic flow, SemFlowRAG guides the retrieval process from abstract concepts to concrete evidence. This mechanism effectively prevents semantic drift and noise accumulation, ensuring that generated responses are logically rigorous, evidence-grounded, and highly accurate for multi-hop reasoning tasks.
+SemFlowRAG is a novel framework for complex reasoning that uses a Semantic Gradient Knowledge Graph to organize retrieval. Through directed semantic flow, it guides search from abstract concepts to concrete evidence. This hierarchical approach ensures generated responses are logically rigorous and grounded in precise factual details.
 
 
 ## Method Pipeline
