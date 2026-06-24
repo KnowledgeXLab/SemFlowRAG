@@ -107,6 +107,14 @@ The paper evaluates SemFlowRAG on NaturalQuestions, PopQA, MuSiQue, 2WikiMultiHo
 - Compared with HippoRAG 2, GraphRAG, RAPTOR, LightRAG, BM25, Contriever, GTR, and NV-Embed-v2, SemFlowRAG achieves stronger average QA F1 and Recall@5.
 
 
-# Acknowledgement
+## Acknowledgement
 We gratefully acknowledge the use of the following open-source projects in our work:
+
 [HippoRAG](https://github.com/OSU-NLP-Group/HippoRAG)
+
+
+## Contact
+For any questions or feedback, please:
+
+Open an issue in the GitHub repository
+Reach out to us at qinhouyuan64@gmail.com
