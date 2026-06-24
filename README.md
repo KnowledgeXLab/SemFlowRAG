@@ -13,10 +13,7 @@ SemFlowRAG is a novel framework for complex reasoning that uses a Semantic Gradi
 
 ## Installation
 
-Install from this directory in editable mode so scripts use the local implementation:
-
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
 
 conda create -n semflowrag python=3.10
 conda activate semflowrag
@@ -24,12 +21,12 @@ conda activate semflowrag
 pip install -e .
 ```
 
-Common environment variables:
+Initialize the environmental variables:
 
 ```sh
 export CUDA_VISIBLE_DEVICES=0,1,2,3
-export HF_HOME=<your_huggingface_home>
-export OPENAI_API_KEY=<your_openai_api_key>
+export HF_HOME=<your huggingface home>
+export OPENAI_API_KEY=<your openai api key>
 ```
 
 For local vLLM serving, also set:
@@ -43,59 +40,14 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 Use the small `sample` dataset to verify the environment:
 
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
-conda activate semflowrag
 
 dataset=sample
 python main.py \
   --dataset $dataset \
   --llm_base_url https://api.openai.com/v1 \
-  --llm_name gpt-4o-mini \
+  --llm_name gpt-4o-mini \ # Any OpenAI model name
   --embedding_name nvidia/NV-Embed-v2
 ```
-
-`main.py` automatically reads:
-
-- Corpus: `reproduce/dataset/${dataset}_corpus.json`
-- Queries and answers: `reproduce/dataset/${dataset}.json`
-- Fact-filter prompt: `src/semflowrag/prompts/dspy_prompts/filter_llama3.3-70B-Instruct.json`
-- Outputs: `outputs/${dataset}/`
-
-Useful arguments:
-
-- `--force_index_from_scratch true`: ignore existing embedding and graph caches and rebuild the index.
-- `--force_openie_from_scratch true`: ignore existing OpenIE caches and rerun entity/triple extraction.
-- `--openie_mode online`: run OpenIE through an OpenAI-compatible API.
-- `--openie_mode offline`: run OpenIE with vLLM offline batch mode for larger indexing jobs.
-- `--save_dir outputs`: default value; expanded by `main.py` to `outputs/{dataset}`.
-
-## Enabling Directed Semantic Flow
-
-The directed semantic-flow implementation is controlled by `BaseConfig.enable_directed_ppr`. It is currently `False` by default, so running `main.py` without modification uses the SemFlowRAG 2 base graph retrieval path.
-
-To run the main method from the EMNLP paper, explicitly enable it in the `BaseConfig(...)` construction inside `main.py`:
-
-```python
-config = BaseConfig(
-    # ... existing args ...
-    enable_directed_ppr=True,
-    ppr_down_direction_prob=0.9,
-    ppr_up_direction_prob=0.1,
-    ppr_score_lambda_rel=1.0,
-    ppr_score_lambda_div=1.0,
-)
-```
-
-When enabled, `BaseConfig.__post_init__` forces `is_directed_graph=True`. During indexing, the system precomputes entity abstractness and related caches. During retrieval, each query calls `build_directed_edge_weights(...)` to rewrite edge weights using query relevance and abstractness difference.
-
-Related ablation and analysis options:
-
-- `ppr_skip_direction_control=True`: keep the edge scoring formula, but disable the 9:1 directional budget split.
-- `ppr_score_lambda_rel=0` or adjust `ppr_score_const_base`: study retrieval without query relevance.
-- `ppr_score_lambda_div=0`: study retrieval without the abstractness-difference penalty.
-- `dump_retrieval_artifacts=True`: write query-level seeds and retrieved passages to `retrieval_artifacts.jsonl`.
-- `dump_entity_black_hole=True`: write top entity nodes, abstractness, and query similarity to `entity_black_hole_artifacts.jsonl`.
-- `ppr_experiment_mode="entity_only_innovation"` or `"entity_only_vanilla"`: run side-channel entity-only PPR comparisons without changing the main retrieval output.
 
 ## Local vLLM Usage
 
@@ -104,7 +56,7 @@ Start an OpenAI-compatible vLLM server:
 ```sh
 export CUDA_VISIBLE_DEVICES=0,1
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
-export HF_HOME=<your_huggingface_home>
+export HF_HOME=<your huggingface home>
 
 conda activate semflowrag
 vllm serve meta-llama/Llama-3.3-70B-Instruct \
@@ -116,7 +68,7 @@ vllm serve meta-llama/Llama-3.3-70B-Instruct \
 In another terminal, run the experiment:
 
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
+
 conda activate semflowrag
 
 export CUDA_VISIBLE_DEVICES=2,3
@@ -136,7 +88,7 @@ If GPU memory is insufficient, reduce `--max_model_len`, reduce `--gpu-memory-ut
 For larger corpora, online OpenIE can be slow. You can first generate OpenIE caches with vLLM offline batch mode:
 
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
+
 conda activate semflowrag
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
@@ -226,7 +178,7 @@ Actual directory names are derived from `llm_name` and `embedding_name` by repla
 OpenAI-compatible test:
 
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
+
 conda activate semflowrag
 export OPENAI_API_KEY=<your_openai_api_key>
 
@@ -236,7 +188,7 @@ python tests_openai.py
 Local vLLM test:
 
 ```sh
-cd /mnt/phwfile/qinhouyuan/SemFlowRAG/Innovation
+
 conda activate semflowrag
 
 export CUDA_VISIBLE_DEVICES=1
