@@ -1,26 +1,5 @@
-# SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence
+# SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence for Complex Reasoning
 
-This directory contains the experimental implementation for the paper
-[`SemFlowRAG__2026_EMNLP.pdf`](../SemFlowRAG__2026_EMNLP.pdf):
-**SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence for Complex Reasoning**.
-
-SemFlowRAG improves graph-augmented RAG for complex question answering. Instead of treating the knowledge graph as a flat, undirected retrieval space, it organizes the corpus into a semantic gradient graph and guides retrieval from abstract concepts toward concrete passage evidence with directed Personalized PageRank.
-
-<p align="center">
-  <img src="images/intro.png" width="90%" alt="Conceptual comparison between flat Graph RAG and SemFlowRAG directed semantic flow">
-</p>
-
-## Motivation
-
-Many Graph RAG systems use undirected graphs, community summaries, or hierarchy-agnostic random walks. During retrieval, probability mass can accumulate around high-degree, abstract concept nodes. The paper calls this failure mode a **probability black hole**: retrieval drifts toward broad concepts and loses the fine-grained evidence needed for multi-hop reasoning.
-
-SemFlowRAG addresses this with three ideas:
-
-1. **Entity abstractness estimation**: for each entity, collect the embeddings of passages containing that entity and measure the variance of those embeddings. Entities appearing in many semantically diverse contexts are treated as more abstract; entities appearing in narrow contexts are treated as more concrete.
-2. **Semantic gradient graph construction**: preserve OpenIE entities and factual relations, but attach an abstractness difference to entity-entity edges. This turns a flat graph into a corpus-adaptive semantic gradient graph.
-3. **Directed PPR retrieval**: for each query, rewrite edge weights using both query relevance and abstractness difference. The walk is biased to move from high abstractness to low abstractness, so probability converges on concrete evidence passages.
-
-The main directed-PPR setting allocates most transition probability to the downward direction, typically `down:up = 0.9:0.1`. Query relevance keeps the walk task-specific, while the abstractness penalty prevents large semantic jumps.
 
 ## Repository Layout
 
