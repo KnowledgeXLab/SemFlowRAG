@@ -1,24 +1,8 @@
 # SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence for Complex Reasoning
 
 
-## Repository Layout
+SemFlowRAG is a novel framework for complex reasoning in Retrieval-Augmented Generation, designed to overcome the "Probability Black Holes" inherent in traditional graph-based retrieval. By constructing a Semantic Gradient Knowledge Graph and employing directed semantic flow, SemFlowRAG guides the retrieval process from abstract concepts to concrete evidence. This mechanism effectively prevents semantic drift and noise accumulation, ensuring that generated responses are logically rigorous, evidence-grounded, and highly accurate for multi-hop reasoning tasks.
 
-All runnable code in this repository is under `Innovation/`.
-
-- `main.py`: main reproduction entry point. It reads `reproduce/dataset/{dataset}.json` and `{dataset}_corpus.json`, then runs indexing, retrieval, QA, and evaluation.
-- `main_dpr.py`: DPR baseline using `StandardRAG`, without OpenIE graph construction.
-- `main_azure.py`: Azure OpenAI / embedding endpoint entry point.
-- `demo.py`, `demo_openai.py`, `demo_local.py`, `demo_azure.py`, `demo_bedrock.py`: small quick-start demos.
-- `tests_openai.py`, `tests_local.py`, `tests_azure.py`: regression tests for indexing, graph loading, document updates, and deletion.
-- `src/semflowrag/SemFlowRAG.py`: main class implementing `index`, `retrieve`, `rag_qa`, graph construction, PPR, and directed PPR.
-- `src/semflowrag/StandardRAG.py`: standard passage-embedding RAG baseline.
-- `src/semflowrag/embedding_store.py`: storage for chunk, entity, and fact embeddings.
-- `src/semflowrag/information_extraction/`: OpenIE extraction, including online OpenAI-compatible calls and vLLM offline batch mode.
-- `src/semflowrag/embedding_model/`: embedding model adapters, including NV-Embed-v2, GritLM, Contriever, and OpenAI-compatible embeddings.
-- `src/semflowrag/llm/`: LLM adapters for OpenAI-compatible APIs, vLLM, and other local/cloud backends.
-- `src/semflowrag/prompts/`: prompt templates for NER, triple extraction, fact filtering, and QA.
-- `src/semflowrag/evaluation/`: retrieval recall and QA EM/F1 metrics.
-- `reproduce/dataset/`: reproduction datasets, including `sample`, `musique`, `hotpotqa`, `2wikimultihopqa`, `popqa`, `nq_rear`, `lveval`, and `narrativeqa_dev_10_doc`.
 
 ## Method Pipeline
 
@@ -26,26 +10,6 @@ All runnable code in this repository is under `Innovation/`.
   <img src="images/methodology.png" width="90%" alt="SemFlowRAG offline semantic gradient indexing and online directed PPR search">
 </p>
 
-Offline indexing:
-
-1. Load the corpus and format each document as `title + "\n" + text`.
-2. Build a dense embedding store for passages.
-3. Run OpenIE to extract named entities and RDF-style factual triples.
-4. Build embedding stores for entities and facts.
-5. Construct graph edges from entity-entity facts, passage-entity links, and entity similarity links.
-6. If `enable_directed_ppr=True`, precompute entity abstractness, normalization statistics, self-loops, and retrieval caches.
-7. Save graph, embeddings, and OpenIE results under `outputs/` for reuse.
-
-Online retrieval and QA:
-
-1. Encode the query and retrieve candidate facts from the fact embedding store.
-2. Run the DSPy fact filter to keep query-relevant bridge facts and answer-bearing facts.
-3. Map retained facts to entity seeds and mix them with DPR passage seeds to build the PPR reset distribution.
-4. If directed PPR is enabled, rewrite entity-edge weights for the current query using query relevance and abstractness difference.
-5. Run PPR over the graph and rank passage nodes by their converged scores.
-6. Feed the top-k passages to the LLM for answer generation and compute QA / retrieval metrics when gold labels are available.
-
-If fact filtering returns no relevant candidate facts, the system falls back to dense passage retrieval instead of propagating from unreliable graph seeds.
 
 ## Installation
 
