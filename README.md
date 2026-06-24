@@ -98,8 +98,6 @@ python main.py \
   --embedding_name nvidia/NV-Embed-v2
 ```
 
-If you change `--port`, update `--llm_base_url` accordingly. If you change `--served-model-name`, use the same value for `--llm_name`.
-
 
 ## Experimental Findings
 
@@ -107,14 +105,3 @@ The paper evaluates SemFlowRAG on NaturalQuestions, PopQA, MuSiQue, 2WikiMultiHo
 
 - Directed semantic flow retrieves more complete evidence chains on multi-hop QA and reduces semantic drift from high-abstractness hub nodes.
 - Compared with HippoRAG 2, GraphRAG, RAPTOR, LightRAG, BM25, Contriever, GTR, and NV-Embed-v2, SemFlowRAG achieves stronger average QA F1 and Recall@5.
-- Ablations show that direction control, query relevance, and the abstractness penalty all contribute to performance.
-
-See the paper PDF in the repository root for full experimental settings, numeric results, ablations, and the case study.
-
-## Notes
-
-- `enable_directed_ppr` is not currently exposed as a CLI argument. To reproduce the main paper method, set it explicitly in `BaseConfig`.
-- `max_qa_steps` exists in the config, but the current main QA path reads top-k evidence once and generates the answer in a single call; it is not a default multi-step IRCoT loop.
-- OpenIE quality directly affects graph quality. Missing entities, incorrect triples, or noisy corpora can degrade abstractness estimation and retrieval.
-- Directed semantic flow assumes that most complex questions benefit from moving from abstract concepts toward concrete evidence. For tasks requiring lateral association or bottom-up inference, tune the direction ratio, reset probability, or ablation flags.
-- Large LLMs and embedding models require substantial GPU memory. Start with the `sample` dataset before scaling to full benchmarks.
