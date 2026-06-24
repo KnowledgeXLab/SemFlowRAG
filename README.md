@@ -105,3 +105,8 @@ The paper evaluates SemFlowRAG on NaturalQuestions, PopQA, MuSiQue, 2WikiMultiHo
 
 - Directed semantic flow retrieves more complete evidence chains on multi-hop QA and reduces semantic drift from high-abstractness hub nodes.
 - Compared with HippoRAG 2, GraphRAG, RAPTOR, LightRAG, BM25, Contriever, GTR, and NV-Embed-v2, SemFlowRAG achieves stronger average QA F1 and Recall@5.
+
+
+# Acknowledgement
+We gratefully acknowledge the use of the following open-source projects in our work:
+[HippoRAG](https://github.com/OSU-NLP-Group/HippoRAG)
