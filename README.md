@@ -116,5 +116,5 @@ We gratefully acknowledge the use of the following open-source projects in our w
 ## Contact
 For any questions or feedback, please:
 
-Open an issue in the GitHub repository
-Reach out to us at qinhouyuan64@gmail.com
+- Open an issue in the GitHub repository
+- Reach out to us at [qinhouyuan64@gmail.com](mailto:qinhouyuan64@gmail.com)
