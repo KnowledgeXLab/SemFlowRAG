@@ -1,5 +1,6 @@
 # SemFlowRAG: Directed Semantic Flow from Abstraction to Evidence for Complex Reasoning
 
+[![arXiv](https://img.shields.io/badge/arXiv-2606.28447-b31b1b)](https://arxiv.org/abs/2606.28447)
 
 SemFlowRAG is a novel framework for complex reasoning that uses a Semantic Gradient Knowledge Graph to organize retrieval. Through directed semantic flow, it guides search from abstract concepts to concrete evidence. This hierarchical approach ensures generated responses are logically rigorous and grounded in precise factual details.
 
